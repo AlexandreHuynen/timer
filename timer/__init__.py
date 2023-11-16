@@ -98,13 +98,13 @@ class Timer:
 
         return self
 
-    def auto_number(self):
+    def auto_number(self, threshold=0.2):
         i = 1
         while True:
             for j in 1, 2, 5:
                 number = i * j
                 time_taken = self.__timeit__(number)
-                if time_taken >= 0.2:
+                if time_taken >= threshold:
                     return number, time_taken
             i *= 10
 
