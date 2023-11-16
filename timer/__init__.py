@@ -44,13 +44,17 @@ class Timer:
         return str(self.time)
 
     def __str__(self) -> str:
-        if len(self._times) > 1:
+        if self._times is None:
+            txt = 'NaN'
+        elif len(self._times) > 1:
             avg, std = (self.__format_time__(dt, precision=2) for dt in (self._times.mean(), self._times.std()))
-            a, b = (self.__format_time__(dt, precision=2) for dt in (self.best, self.worst))
-            return f'{avg} ± {std} per loop of {self._number} evaluations ' \
-                   f'(mean ± std. dev. of {self._times.size}; range = [{a}, {b}])'
+            _min, _max = (self.__format_time__(dt, precision=2) for dt in (self.best, self.worst))
+            txt = f'{avg} ± {std} per loop of {self._number} evaluations ' \
+                  f'(mean ± std. dev. of {self._times.size}; range = [{_min}, {_max}])'
         else:
-            return self.__format_time__(self.time, precision=2)
+            txt = self.__format_time__(self.time, precision=2)
+
+        return txt
 
     def __sub__(self, other, verify=False):
         assert isinstance(other, Timer)
